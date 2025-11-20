@@ -1,26 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using System.IO;
+using System.Linq;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Mangia.View
 {
-    /// <summary>
-    /// Interaction logic for LibraryView.xaml
-    /// </summary>
     public partial class LibraryView : UserControl
     {
+        public ObservableCollection<LibraryFolder> FolderList { get; } = new ObservableCollection<LibraryFolder>();
+
         public LibraryView()
         {
             InitializeComponent();
+            DataContext = this;
+            LoadLibraryFolders();
         }
+
+        private void LoadLibraryFolders()
+        {
+            string libPath = App.Config.LibraryPath;
+            if (!Directory.Exists(libPath)) return;
+
+            var dirInfos = new DirectoryInfo(libPath)
+                .GetDirectories()
+                .Where(di => !di.Name.StartsWith(".") &&
+                             (di.Attributes & FileAttributes.Hidden) == 0);
+
+            foreach (var dir in dirInfos)
+            {
+                // 查找非隐藏，且不是.开头的，名为cover的图片文件
+                var cover = dir.GetFiles()
+                    .Where(f =>
+                        !f.Name.StartsWith(".") &&
+                        (f.Attributes & FileAttributes.Hidden) == 0 &&
+                        (f.Name.Equals("cover.jpg", StringComparison.OrdinalIgnoreCase) ||
+                         f.Name.Equals("cover.png", StringComparison.OrdinalIgnoreCase)))
+                    .FirstOrDefault();
+
+                if (cover == null)
+                {
+                    // 查找 cover*.jpg/png 且过滤隐藏/点文件
+                    cover = dir.GetFiles()
+                        .Where(f =>
+                            !f.Name.StartsWith(".") &&
+                            (f.Attributes & FileAttributes.Hidden) == 0 &&
+                            f.Name.StartsWith("cover", StringComparison.OrdinalIgnoreCase) &&
+                            (f.Extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                             f.Extension.Equals(".png", StringComparison.OrdinalIgnoreCase)))
+                        .FirstOrDefault();
+                }
+
+                if (cover != null)
+                {
+                    FolderList.Add(new LibraryFolder
+                    {
+                        FolderPath = dir.FullName,
+                        FolderName = dir.Name,
+                        CoverPath = cover.FullName
+                    });
+                }
+            }
+        }
+    }
+
+    public class LibraryFolder
+    {
+        public string FolderPath { get; set; } = string.Empty;
+        public string FolderName { get; set; } = string.Empty;
+        public string CoverPath { get; set; } = string.Empty;
     }
 }

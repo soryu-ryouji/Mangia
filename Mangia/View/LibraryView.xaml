@@ -4,6 +4,45 @@
              MinHeight="300" MinWidth="400"
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
     <Grid Background="LightBlue">
-        <TextBlock Text="Library Page" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding FolderList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Margin="20" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="8" Padding="6" BorderBrush="#DDD" BorderThickness="1" Background="#FFF" Width="160" Height="220">
+                            <StackPanel>
+                                <Image x:Name="coverImage"
+                                       Source="{Binding CoverPath}"
+                                       Height="120"
+                                       Stretch="UniformToFill"
+                                       Margin="0,0,0,8" />
+                                <TextBlock Text="{Binding FolderName}"
+                                           TextAlignment="Center"
+                                           FontWeight="Bold"
+                                           FontSize="16" />
+                            </StackPanel>
+                        </Border>
+                        <!-- FIX: DataTemplate.Triggers is not supported in WPF. 
+                             Use a value converter or DataTrigger in a Style instead. -->
+                        <DataTemplate.Resources>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CoverPath}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CoverPath}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataTemplate.Resources>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
