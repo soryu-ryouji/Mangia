@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mangia"
         mc:Ignorable="d"
-        Title="Mangia" Height="450" Width="800">
+        Title="Mangia" Height="800" Width="1500">
     <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <StackPanel Grid.Column="0"
+                        x:Name="MainMenu_Sidebar"
+                        Background="LightGray"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch">
+                <Button Content="Library" Click="Library_Click"/>
+                <Button Content="Config" Click="Config_Click"/>
+            </StackPanel>
+
+            <ContentControl Grid.Column="1"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            x:Name="MainMenu_Content"
+                            Background="White"/>
+        </Grid>
     </Grid>
 </Window>

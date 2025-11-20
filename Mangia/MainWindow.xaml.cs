@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Mangia.View;
 
 namespace Mangia
 {
@@ -19,6 +20,18 @@ namespace Mangia
         public MainWindow()
         {
             InitializeComponent();
+
+            MainMenu_Content.Content = new LibraryView();
+        }
+
+        private void Library_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenu_Content.Content = new LibraryView();
+        }
+
+        private void Config_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenu_Content.Content = new ConfigView();
         }
     }
 }
