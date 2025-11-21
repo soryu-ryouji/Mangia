@@ -11,5 +11,8 @@
     <Compile Update="View\MangaDetailView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\MangaReaderView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

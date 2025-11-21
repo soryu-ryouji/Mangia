@@ -22,9 +22,11 @@
         <!-- 右侧 章节列表 -->
         <StackPanel Grid.Column="1" Margin="32,0,0,0">
             <TextBlock Text="章节列表" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,12"/>
-            <ListBox ItemsSource="{Binding ChapterInfos}" DisplayMemberPath="Title"
+            <ListBox x:Name="ChaptersListBox"
+                     ItemsSource="{Binding ChapterInfos}" DisplayMemberPath="Title"
                      BorderBrush="#ddd" BorderThickness="1" MinWidth="320" MinHeight="340"
-                     Margin="0,0,0,0"/>
+                     Margin="0,0,0,0"
+                     MouseDoubleClick="ChaptersListBox_MouseDoubleClick"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="Mangia.View.MangaReaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mangia.View"
+             mc:Ignorable="d"
+             Background="White"
+             d:MinHeight="400" d:MinWidth="900"
+             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+             Focusable="True">
+    <Grid Name="RootGrid"
+          PreviewMouseLeftButtonUp="OnViewerMouseLeftButtonUp"
+          MouseMove="RootGrid_MouseMove"
+          MouseLeave="RootGrid_MouseLeave">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Two-page split view -->
+        <Grid Grid.Row="0" Name="PagesGrid" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left page -->
+            <ScrollViewer Grid.Column="0"
+                          x:Name="LeftScroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="Black">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="LeftImage" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Viewbox>
+            </ScrollViewer>
+
+            <!-- Right page -->
+            <ScrollViewer Grid.Column="1"
+                          x:Name="RightScroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="Black">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="RightImage" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Viewbox>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Toolbar (initially hidden; shown only when mouse near bottom) -->
+        <DockPanel x:Name="ToolbarPanel" Grid.Row="1" Margin="8" LastChildFill="False" Visibility="Collapsed"
+                  Background="#33FFFFFF" IsHitTestVisible="True">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                <Button x:Name="FitButton" Click="FitButton_Click" Padding="8" Margin="0,0,8,0">Fit</Button>
+            </StackPanel>
+
+            <TextBlock x:Name="StatusText" DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="13" Foreground="Black" />
+        </DockPanel>
+    </Grid>
+</UserControl>
