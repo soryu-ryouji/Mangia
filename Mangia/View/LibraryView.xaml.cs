@@ -4,14 +4,15 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Mangia.View
 {
     public partial class LibraryView : UserControl
     {
-        public ObservableCollection<LibraryFolder> FolderList { get; } = new ObservableCollection<LibraryFolder>();
+        public ObservableCollection<MangaInfo> MangaList { get; private set; } = new ();
 
-        public event EventHandler<LibraryFolder>? ItemClicked;
+        public event EventHandler<MangaInfo>? ItemClicked;
 
         public LibraryView()
         {
@@ -22,62 +23,25 @@ namespace Mangia.View
 
         private void LoadLibraryFolders()
         {
-            string libPath = App.Config.LibraryPath;
-            if (!Directory.Exists(libPath)) return;
+            if (Directory.Exists(App.Config.LibraryPath) is false) return;
 
-            var dirInfos = new DirectoryInfo(libPath)
-                .GetDirectories()
-                .Where(di => !di.Name.StartsWith(".") &&
-                             (di.Attributes & FileAttributes.Hidden) == 0);
+            var libDir = new DirectoryInfo(App.Config.LibraryPath);
+            var mangaInfos = libDir.GetDirectories()
+                .Where(dir => dir.Name.StartsWith('.') is false)
+                .Where(dir => dir.Attributes.HasFlag(FileAttributes.Hidden) is false)
+                .Select(dir => new MangaInfo(dir.Name, dir.FullName))
+                .ToList();
 
-            foreach (var dir in dirInfos)
-            {
-                var cover = dir.GetFiles()
-                    .Where(f =>
-                        !f.Name.StartsWith(".") &&
-                        (f.Attributes & FileAttributes.Hidden) == 0 &&
-                        (f.Name.Equals("cover.jpg", StringComparison.OrdinalIgnoreCase) ||
-                         f.Name.Equals("cover.png", StringComparison.OrdinalIgnoreCase)))
-                    .FirstOrDefault();
-
-                if (cover == null)
-                {
-                    cover = dir.GetFiles()
-                        .Where(f =>
-                            !f.Name.StartsWith(".") &&
-                            (f.Attributes & FileAttributes.Hidden) == 0 &&
-                            f.Name.StartsWith("cover", StringComparison.OrdinalIgnoreCase) &&
-                            (f.Extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                             f.Extension.Equals(".png", StringComparison.OrdinalIgnoreCase)))
-                        .FirstOrDefault();
-                }
-
-                if (cover != null)
-                {
-                    FolderList.Add(new LibraryFolder
-                    {
-                        FolderPath = dir.FullName,
-                        FolderName = dir.Name,
-                        CoverPath = cover.FullName
-                    });
-                }
-            }
+            MangaList = new ObservableCollection<MangaInfo>(mangaInfos);
         }
 
         private void OnLibraryItemClick(object sender, MouseButtonEventArgs e)
         {
             var border = sender as Border;
-            if (border?.DataContext is LibraryFolder folder)
+            if (border?.DataContext is MangaInfo manga)
             {
-                ItemClicked?.Invoke(this, folder); // 通知 MainWindow
+                ItemClicked?.Invoke(this, manga); // 通知 MainWindow
             }
         }
-    }
-
-    public class LibraryFolder
-    {
-        public string FolderPath { get; set; } = string.Empty;
-        public string FolderName { get; set; } = string.Empty;
-        public string CoverPath { get; set; } = string.Empty;
     }
 }

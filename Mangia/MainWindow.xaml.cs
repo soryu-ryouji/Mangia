@@ -44,9 +44,9 @@ namespace Mangia
             MainMenuContent.Content = new ConfigView();
         }
 
-        private void LibraryView_ItemClicked(object? sender, LibraryFolder folder)
+        private void LibraryView_ItemClicked(object? sender, MangaInfo manga)
         {
-            var detailView = new MangaDetailView(folder.FolderName, folder.CoverPath, folder.FolderPath);
+            var detailView = new MangaDetailView(manga);
             // 打印目录
             //MessageBox.Show(folder.FolderPath);
 

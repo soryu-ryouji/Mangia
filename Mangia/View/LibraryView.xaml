@@ -5,7 +5,7 @@
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
     <Grid Background="LightBlue">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding FolderList}">
+            <ItemsControl ItemsSource="{Binding MangaList}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel IsItemsHost="True" Margin="20" />
@@ -18,11 +18,11 @@
                                 MouseLeftButtonUp="OnLibraryItemClick" Cursor="Hand">
                             <StackPanel>
                                 <Image x:Name="coverImage"
-                                       Source="{Binding CoverPath}"
+                                       Source="{Binding CoverUrl}"
                                        Height="120"
                                        Stretch="UniformToFill"
                                        Margin="0,0,0,8" />
-                                <TextBlock Text="{Binding FolderName}"
+                                <TextBlock Text="{Binding Title}"
                                            TextAlignment="Center"
                                            FontWeight="Bold"
                                            FontSize="16" />
@@ -31,10 +31,10 @@
                         <DataTemplate.Resources>
                             <Style TargetType="Image">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CoverPath}" Value="">
+                                    <DataTrigger Binding="{Binding CoverUrl}" Value="">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding CoverPath}" Value="{x:Null}">
+                                    <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
                                 </Style.Triggers>

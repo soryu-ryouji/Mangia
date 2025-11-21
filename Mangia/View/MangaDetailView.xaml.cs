@@ -8,45 +8,25 @@ namespace Mangia.View;
 
 public partial class MangaDetailView : UserControl
 {
-    public MangaDetailView(string mangaTitle, string coverPath, string folderPath)
+    public MangaDetailView(MangaInfo manga)
     {
         InitializeComponent();
 
-        var viewModel = new MangaDetailViewModel(mangaTitle, coverPath, folderPath);
+        var viewModel = new MangaDetailViewModel(manga);
         this.DataContext = viewModel;
     }
 }
 
 public class MangaDetailViewModel
 {
-    public string MangaTitle { get; }
-    public string CoverPath { get; }
-    public ObservableCollection<MangaChapter> Chapters { get; } = new();
+    public string MangaTitle { get; private set; }
+    public string CoverPath { get; private set; }
+    public ObservableCollection<ChapterInfo> ChapterInfos { get; } = new();
 
-    public MangaDetailViewModel(string mangaTitle, string coverPath, string folderPath)
+    public MangaDetailViewModel(MangaInfo info)
     {
-        MangaTitle = mangaTitle;
-        CoverPath = coverPath;
-
-        if (Directory.Exists(folderPath))
-        {
-            var dirs = new DirectoryInfo(folderPath).GetDirectories()
-                .Where(d => !d.Name.StartsWith(".") && (d.Attributes & FileAttributes.Hidden) == 0);
-
-            foreach (var chapterDir in dirs)
-            {
-                Chapters.Add(new MangaChapter
-                {
-                    Name = chapterDir.Name,
-                    FolderPath = chapterDir.FullName
-                });
-            }
-        }
+        MangaTitle = info.Title;
+        CoverPath = info.CoverUrl;
+        ChapterInfos = new(info.ChapterInfos);
     }
-}
-
-public class MangaChapter
-{
-    public string Name { get; set; }
-    public string FolderPath { get; set; }
 }
