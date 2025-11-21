@@ -31,7 +31,7 @@ namespace Mangia
                 _libraryView.ItemClicked += LibraryView_ItemClicked;
             }
 
-            MainMenu_Content.Content = _libraryView;
+            MainMenuContent.Content = _libraryView;
         }
 
         private void Library_Click(object sender, RoutedEventArgs e)
@@ -41,7 +41,7 @@ namespace Mangia
 
         private void Config_Click(object sender, RoutedEventArgs e)
         {
-            MainMenu_Content.Content = new ConfigView();
+            MainMenuContent.Content = new ConfigView();
         }
 
         private void LibraryView_ItemClicked(object? sender, LibraryFolder folder)
@@ -50,7 +50,7 @@ namespace Mangia
             // 打印目录
             //MessageBox.Show(folder.FolderPath);
 
-            MainMenu_Content.Content = detailView;
+            MainMenuContent.Content = detailView;
         }
     }
 }

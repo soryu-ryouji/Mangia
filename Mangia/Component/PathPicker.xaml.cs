@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
 
-namespace Mangia.Conponent;
+namespace Mangia.Component;
 
 public partial class PathPicker : UserControl
 {
