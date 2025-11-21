@@ -12,26 +12,45 @@ using Mangia.View;
 
 namespace Mangia
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private LibraryView? _libraryView;
+        private MangaDetailView? _mangaDetailView;
         public MainWindow()
         {
             InitializeComponent();
 
-            MainMenu_Content.Content = new LibraryView();
+            SwitchToLibraryView();
+        }
+
+        public void SwitchToLibraryView()
+        {
+            if (_libraryView == null)
+            {
+                _libraryView = new LibraryView();
+                _libraryView.ItemClicked += LibraryView_ItemClicked;
+            }
+
+            MainMenu_Content.Content = _libraryView;
         }
 
         private void Library_Click(object sender, RoutedEventArgs e)
         {
-            MainMenu_Content.Content = new LibraryView();
+            SwitchToLibraryView();
         }
 
         private void Config_Click(object sender, RoutedEventArgs e)
         {
             MainMenu_Content.Content = new ConfigView();
+        }
+
+        private void LibraryView_ItemClicked(object? sender, LibraryFolder folder)
+        {
+            var detailView = new MangaDetailView(folder.FolderName, folder.CoverPath, folder.FolderPath);
+            // 打印目录
+            //MessageBox.Show(folder.FolderPath);
+
+            MainMenu_Content.Content = detailView;
         }
     }
 }

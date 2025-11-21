@@ -13,7 +13,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="8" Padding="6" BorderBrush="#DDD" BorderThickness="1" Background="#FFF" Width="160" Height="220">
+                        <Border Margin="8" Padding="6" BorderBrush="#DDD" BorderThickness="1" Background="#FFF"
+                                Width="160" Height="220"
+                                MouseLeftButtonUp="OnLibraryItemClick" Cursor="Hand">
                             <StackPanel>
                                 <Image x:Name="coverImage"
                                        Source="{Binding CoverPath}"
@@ -26,8 +28,6 @@
                                            FontSize="16" />
                             </StackPanel>
                         </Border>
-                        <!-- FIX: DataTemplate.Triggers is not supported in WPF. 
-                             Use a value converter or DataTrigger in a Style instead. -->
                         <DataTemplate.Resources>
                             <Style TargetType="Image">
                                 <Style.Triggers>

@@ -3,12 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Mangia.View
 {
     public partial class LibraryView : UserControl
     {
         public ObservableCollection<LibraryFolder> FolderList { get; } = new ObservableCollection<LibraryFolder>();
+
+        public event EventHandler<LibraryFolder>? ItemClicked;
 
         public LibraryView()
         {
@@ -29,7 +32,6 @@ namespace Mangia.View
 
             foreach (var dir in dirInfos)
             {
-                // 查找非隐藏，且不是.开头的，名为cover的图片文件
                 var cover = dir.GetFiles()
                     .Where(f =>
                         !f.Name.StartsWith(".") &&
@@ -40,7 +42,6 @@ namespace Mangia.View
 
                 if (cover == null)
                 {
-                    // 查找 cover*.jpg/png 且过滤隐藏/点文件
                     cover = dir.GetFiles()
                         .Where(f =>
                             !f.Name.StartsWith(".") &&
@@ -60,6 +61,15 @@ namespace Mangia.View
                         CoverPath = cover.FullName
                     });
                 }
+            }
+        }
+
+        private void OnLibraryItemClick(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as Border;
+            if (border?.DataContext is LibraryFolder folder)
+            {
+                ItemClicked?.Invoke(this, folder); // 通知 MainWindow
             }
         }
     }
